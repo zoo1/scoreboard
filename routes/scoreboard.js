@@ -15,7 +15,10 @@ router.get('/', function(req, res, next) {
 
 /* POST /score */
 router.post('/', function(req, res, next) {
-  req.body.player;
+  if (!( req.body.user && req.body.score )) 
+  {
+    return res.json({"status":"failed"});
+  }
   Score.create(req.body, function (err, post) {
     if (err) return next(err);
     res.json(post);

@@ -1,4 +1,5 @@
 var express = require('express');
+var bodyParser = require('body-parser');
 var path = require('path');
 
 var scoreboard = require('./routes/scoreboard');
@@ -15,6 +16,9 @@ mongoose.connect('mongodb://localhost/scoreboard', function(err) {
 
 var app = express();
 
+//parsing bodies
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/score', scoreboard);
 
 // catch 404 and forward to error handler
