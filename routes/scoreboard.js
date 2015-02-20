@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var mongoose = require('mongoose');
+var crypt = require('../crypt/crypt.js');
 var Score = require('../models/scoreboard.js');
 
 /* GET /score listing. */
@@ -26,7 +27,6 @@ router.post('/', function(req, res, next) {
   {
     return res.json({"status":"failed"});
   }
-
   Score.create(req.body, function (err, post) {
     if (err) return next(err);
     Score.count({ score: { $gt: req.body.score } }, function( err, count){
