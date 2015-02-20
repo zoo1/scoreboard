@@ -29,8 +29,8 @@ router.post('/', function(req, res, next) {
 
   Score.create(req.body, function (err, post) {
     if (err) return next(err);
-    Score.count({}, function( err, count){
-    res.json( {"rank": count });
+    Score.count({ score: { $gt: req.body.score } }, function( err, count){
+    res.json( {"rank": count+1 });
     });
   });
 });
