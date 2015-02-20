@@ -23,10 +23,15 @@ router.get('/', function(req, res, next) {
 
 /* POST /score */
 router.post('/', function(req, res, next) {
-  if (!( req.body.user && req.body.score )) 
+  if( !( req.body.user && req.body.score ) ) 
   {
     return res.json({"status":"failed"});
   }
+  
+  var decryptuser = crypt.decrypt(req.body.user);
+  var decryptscore = crypt.decrypt(req.body.score);
+
+
   Score.create(req.body, function (err, post) {
     if (err) return next(err);
     Score.count({ score: { $gt: req.body.score } }, function( err, count){
