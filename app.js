@@ -15,7 +15,6 @@ mongoose.connect('mongodb://localhost/scoreboard', function(err) {
 
 
 var app = express();
-
 //parsing bodies
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

@@ -6,10 +6,17 @@ var Score = require('../models/scoreboard.js');
 
 /* GET /score listing. */
 router.get('/', function(req, res, next) {
-
-  Score.find(function (err, todos) {
+  Score.find(null, 'user score -_id', 
+  {
+    skip:0, // Starting Row
+    limit:100, // Ending Row
+    sort:{
+        score: -1 //Sort by score Added DESC
+    }
+  },
+    function (err, scores) {
     if (err) return next(err);
-    res.json(todos);
+    res.json(scores);
   });
 });
 
@@ -19,9 +26,12 @@ router.post('/', function(req, res, next) {
   {
     return res.json({"status":"failed"});
   }
+
   Score.create(req.body, function (err, post) {
     if (err) return next(err);
-    res.json(post);
+    Score.count({}, function( err, count){
+    res.json( {"rank": count });
+    });
   });
 });
 
