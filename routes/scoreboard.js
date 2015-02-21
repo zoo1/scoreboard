@@ -30,7 +30,8 @@ router.post('/', function(req, res, next) {
   
   var decryptuser = crypt.decrypt(req.body.user);
   var decryptscore = crypt.decrypt(req.body.score);
-
+  console.log(decryptuser);
+  console.log(decryptscore);
 
   Score.create(req.body, function (err, post) {
     if (err) return next(err);
