@@ -21,17 +21,20 @@ router.get('/', function(req, res, next) {
   });
 });
 
-/* POST /score */
+/* POST /score/ */
 router.post('/', function(req, res, next) {
   if( !( req.body.user && req.body.score ) ) 
   {
     return res.json({"status":"failed"});
   }
-  
+
+try {
   var decryptuser = crypt.decrypt(req.body.user);
   var decryptscore = crypt.decrypt(req.body.score);
-  console.log(decryptuser);
-  console.log(decryptscore);
+}
+catch(err){
+  return res.json({"status":"failed"});
+}
 
   Score.create(req.body, function (err, post) {
     if (err) return next(err);
