@@ -25,7 +25,7 @@ router.get('/', function(req, res, next) {
 router.post('/', function(req, res, next) {
   if( !( req.body.user && req.body.score ) ) 
   {
-    return res.json({"status":"failed"});
+    return res.json({"status":"failed to update"});
   }
 
 try {
@@ -33,7 +33,7 @@ try {
   var decryptscore = crypt.decrypt(req.body.score);
 }
 catch(err){
-  return res.json({"status":"failed"});
+  return res.json({"status":"failed to update"});
 }
 
   Score.create(req.body, function (err, post) {
