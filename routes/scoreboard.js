@@ -22,23 +22,22 @@ router.get('/', function(req, res, next) {
 
 /* POST /score/ */
 router.post('/', function(req, res, next) {
-
   if( !( req.body.user && req.body.score ) ) //user and score dont exist
   {
     return res.json({"status":"failed to update"});
   }
-
 try {
   var decryptuser = crypt.decrypt(req.body.user);
   var decryptscore = crypt.decrypt(req.body.score);
 }
 catch(err){
+  console.log(err);
   return res.json({"status":"failed to update"}); //score and user were not decoded correctly
 }
 
-  Score.create({ user : decryptuser, score : decryptscore}, function (err, post) {
+  Score.create({ "user" : decryptuser, "score" : decryptscore }, function (err, post) {
     if (err) return next(err);
-    Score.count({ score: { $gt: req.body.score } }, function( err, count){
+    Score.count({ decryptscore: { $gt: req.body.score } }, function( err, count){
     res.json( {"rank": count+1 });
     });
   });

@@ -8,9 +8,9 @@ var AESCrypt = {};
 AESCrypt.decrypt = function(encryptdata) {
     var decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);
     return Buffer.concat([
-        decipher.update(encryptdata),
+        decipher.update(new Buffer(encryptdata, "base64")),
         decipher.final()
-    ]);
+    ]).toString();
 }
 
 module.exports = AESCrypt;
