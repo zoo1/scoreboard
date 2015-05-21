@@ -6,7 +6,7 @@ frisby.create('Get Invalid Resource')
   .expectJSON( {"status":"failed to find resource"} )
   .toss();
 
-frisby.create('Invalid Posts without score')
+frisby.create('Invalid Post without score')
     .post('http://localhost:3000/score/', {
         user: "bar",
     })
@@ -15,7 +15,7 @@ frisby.create('Invalid Posts without score')
     .expectJSON( {"status":"failed to update"} )
 .toss();
 
-frisby.create('Invalid Posts without user')
+frisby.create('Invalid Post without user')
     .post('http://localhost:3000/score/', {
         score: 1210,
     })
@@ -24,7 +24,7 @@ frisby.create('Invalid Posts without user')
     .expectJSON( {"status":"failed to update"} )
 .toss();
 
-frisby.create('Invalid Posts without encryption')
+frisby.create('Invalid Post without encryption')
     .post('http://localhost:3000/score/', {
         score: 1210,
         user: "bar",
@@ -33,3 +33,33 @@ frisby.create('Invalid Posts without encryption')
     .expectHeaderContains('Content-Type', 'json')
     .expectJSON( {"status":"failed to update"} )
 .toss();
+
+frisby.create('Valid Post with score and user')
+    .post('http://localhost:3000/score/', {
+        score: "e3c5ZF676Abn3ASkXzWq8A==", //aes encrypted 87
+        user: "sQDz20ObSJ7YxraKZVxQ8w==", //aes encypted zach
+    })
+    .expectStatus(200)
+    .expectHeaderContains('Content-Type', 'json')
+    .expectJSONTypes( { rank: Number } )
+    .toss();
+
+frisby.create('Invalid Post with non-number decrypted score')
+    .post('http://localhost:3000/score/', {
+        score: "FN0lsbgnaLs+XTYGNDHs/Q==", //aes encrypted alberta
+        user: "sQDz20ObSJ7YxraKZVxQ8w==", //aes encypted zach
+    })
+    .expectStatus(200)
+    .expectHeaderContains('Content-Type', 'json')
+    .expectJSON( {"status":"failed to update"} )
+    .toss();
+
+frisby.create('Invalid Post with negative decrypted score')
+    .post('http://localhost:3000/score/', {
+        score: "5oyZF8jUC5WlalAldMINkw==", //aes encrypted -10
+        user: "sQDz20ObSJ7YxraKZVxQ8w==", //aes encypted zach
+    })
+    .expectStatus(200)
+    .expectHeaderContains('Content-Type', 'json')
+    .expectJSON( {"status":"failed to update"} )
+    .toss();

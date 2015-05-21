@@ -26,18 +26,30 @@ router.post('/', function(req, res, next) {
   {
     return res.json({"status":"failed to update"});
   }
-try {
-  var decryptuser = crypt.decrypt(req.body.user);
-  var decryptscore = crypt.decrypt(req.body.score);
-}
-catch(err){
-  console.log(err);
-  return res.json({"status":"failed to update"}); //score and user were not decoded correctly
-}
+  try {
+    var decryptuser = crypt.decrypt(req.body.user);
+    var decryptscore = crypt.decrypt(req.body.score);
+  }
+  catch(err){
+    console.log(err);
+    return res.json({"status":"failed to update"}); //score and user were not decoded correctly
+  }
+
+  function isInt(value) {
+  return !isNaN(value) && 
+         parseInt(Number(value)) == value && 
+         !isNaN(parseInt(value, 10));
+  }
+
+  if(!isInt(decryptscore))
+    return res.json({"status":"failed to update"}); //score is not an integer
+  
+  if(parseInt(Number(decryptscore))<0)
+    return res.json({"status":"failed to update"}); //score is not positive
 
   Score.create({ "user" : decryptuser, "score" : decryptscore }, function (err, post) {
     if (err) return next(err);
-    Score.count({ decryptscore: { $gt: req.body.score } }, function( err, count){
+    Score.count({ score: { $gt: decryptscore } }, function( err, count){
     res.json( {"rank": count+1 });
     });
   });
