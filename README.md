@@ -7,4 +7,4 @@ A Node.js score board application using [Express 4](http://expressjs.com/). Whic
 - POST request appends correct score to database and returns ranking of that score
 - GET request returns top 100 scores
 
-Note: Tests are depended on the default config file change it will fail some test cases
+Note: Tests are dependent on the default config file. Changing it will fail some of test cases
