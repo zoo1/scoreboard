@@ -63,3 +63,10 @@ frisby.create('Invalid Post with negative decrypted score')
     .expectHeaderContains('Content-Type', 'json')
     .expectJSON( {"status":"failed to update"} )
     .toss();
+
+frisby.create('Get Score Listing')
+    .get('http://localhost:3000/score/')
+    .expectStatus(200)
+    .expectHeaderContains('Content-Type', 'json')
+    .expectJSONTypes('*', { user: String, score: Number})
+    .toss();
